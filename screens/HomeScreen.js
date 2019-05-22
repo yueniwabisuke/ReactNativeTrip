@@ -10,7 +10,12 @@ class HomeScreen extends React.Component {
       selectedIndex: 0,
     };
   }
-
+  onButtonGroupPress = (selectedIndex) => {
+    this.setState({
+      selectedIndex: selectedIndex
+      // selectedIndex: selectedIndex → selectedIndex と省略しても可
+    });
+  }
   
   render() {
     const buttonList = [
@@ -19,17 +24,17 @@ class HomeScreen extends React.Component {
       'Good (0)',
       'Poor (0)',
     ];
-
+  
     return (
       <View style={{ flex: 1 }}>
         <ButtonGroup
           buttons={buttonList}
           selectedIndex={this.state.selectedIndex}
+          onPress={this.onButtonGroupPress}
         />
       </View>
     );
   }
 }
-
 
 export default HomeScreen;
