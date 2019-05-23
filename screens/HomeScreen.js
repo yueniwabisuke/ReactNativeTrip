@@ -61,6 +61,12 @@ class HomeScreen extends React.Component {
     };
   }
 
+  // `onPress`からの引数は`selectedReview`という名で受け止める(一旦放置。後で使用)
+  onListItemPress = (selectedReview) => {
+    // 'detail'に飛ぶ
+    this.props.navigation.navigate('detail');
+  }
+
   renderReviews() {
     let reviewRank;
 
@@ -125,6 +131,7 @@ class HomeScreen extends React.Component {
                 leftIcon={{ name: review.rank, color: reviewColor }}
                 title={review.country}
                 subtitle={`${review.dateFrom} ~ ${review.dateTo}`}
+                onPress={() => this.onListItemPress(review)} // ←追記部分
               />
             );
           })
