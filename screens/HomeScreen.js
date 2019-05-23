@@ -136,7 +136,7 @@ class HomeScreen extends React.Component {
   onButtonGroupPress = (selectedIndex) => {
     this.setState({
       selectedIndex: selectedIndex
-      // selectedIndex: selectedIndex → selectedIndex と省略しても可
+      //selectedIndex: selectedIndex → selectedIndex と省略しても可
     });
   }
   
