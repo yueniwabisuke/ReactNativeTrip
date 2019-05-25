@@ -1,6 +1,9 @@
 import React from 'react';
 import {Platform, StyleSheet, Text, Image, StatusBar , View} from 'react-native';
 import { createBottomTabNavigator, createAppContainer, getActiveChildNavigationOptions, createNavigator, createStackNavigator } from 'react-navigation';
+import { Provider } from 'react-redux'; // ←追記部分
+
+import store from './store'; // ←追記部分
 
 import WelcomeScreen from './screens/WelcomeScreen';
 import HomeScreen from './screens/HomeScreen';
@@ -147,14 +150,16 @@ const AppContainer = createAppContainer(NavigatorTab);
 export default class App extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
-        <StatusBar barStyle="light-content" />
-        <AppContainer
-          ref={nav => {
-            this.navigator = nav;
-          }}
-        />
-      </View>
+      <Provider store={store}>
+        <View style={styles.container}>
+          <StatusBar barStyle="light-content" />
+          <AppContainer
+            ref={nav => {
+              this.navigator = nav;
+            }}
+          />
+        </View>
+      </Provider>
     );
   }
 }

@@ -1,6 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Button, ButtonGroup, ListItem } from 'react-native-elements'; // ←追記部分
+import { connect } from 'react-redux'; // ←追記部分
+
+import * as actions from '../actions';
 const ALL_INDEX = 0; 
 
 const GREAT = 'sentiment-very-satisfied';
@@ -15,43 +18,6 @@ const POOR = 'sentiment-dissatisfied';
 const POOR_COLOR = 'blue'; // ← 追記部分
 const POOR_INDEX = 3;
 
-const allReviewsTmp = [
-  {
-    country: 'USA',
-    dateFrom: 'Jan/15/2018',
-    dateTo: 'Jan/25/2018',
-    imageURIs: [
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-    ],
-    rank: GREAT,
-  },
-  {
-    country: 'USA',
-    dateFrom: 'Feb/15/2018',
-    dateTo: 'Feb/25/2018',
-    imageURIs: [
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-    ],
-    rank: GOOD,
-  },
-  {
-    country: 'USA',
-    dateFrom: 'Mar/15/2018',
-    dateTo: 'Mar/25/2018',
-    imageURIs: [
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-    ],
-    rank: POOR,
-  },
-];
-
-
 class HomeScreen extends React.Component {
   constructor(props) { // ← おまじないの入力 props
     super(props); // ← おまじないの文 super(props);
@@ -59,6 +25,10 @@ class HomeScreen extends React.Component {
     this.state = {
       selectedIndex: ALL_INDEX,
     };
+  }
+
+  componentDidMount() {
+    this.props.fetchAllReviews();
   }
 
   // `onPress`からの引数は`selectedReview`という名で受け止める(一旦放置。後で使用)
@@ -92,13 +62,13 @@ class HomeScreen extends React.Component {
     // もし`this.state.selectedIndex`が`ALL_INDEX`だったら、
     if (this.state.selectedIndex === ALL_INDEX) { // ←追記部分
       // 丸ごとコピー
-      rankedReviews = allReviewsTmp; // ←追記部分
+      rankedReviews = this.props.allReviews; // ←追記部分
     // もしそうじゃなかったら、
     } else { // ←追記部分
       // 繰り返し処理
-      for (let i = 0; i < allReviewsTmp.length; i++) {
-        if (allReviewsTmp[i].rank === reviewRank) {
-          rankedReviews.push(allReviewsTmp[i]);
+      for (let i = 0; i < this.props.allReviews.length; i++) {
+        if (this.props.allReviews[i].rank === reviewRank) {
+          rankedReviews.push(this.props.allReviews[i]);
         }
       }
     } // ←追記部分
@@ -148,11 +118,36 @@ class HomeScreen extends React.Component {
   }
   
   render() {
+    let nGreat = 0; // "Number of Great" の略。値が変更され得るので`let`で宣言
+    let nGood = 0; // "Number of Good" の略。値が変更され得るので`let`で宣言
+    let nPoor = 0; // "Number of Poor" の略。値が変更され得るので`let`で宣言
+    
+    // `i` が0から1ずつ増えていって(`this.props.allReviews.length`-1)になるまでの
+    // 計`this.props.allReviews.length`回分繰り返す
+    for (let i = 0; i < this.props.allReviews.length; i++) {
+      switch (this.props.allReviews[i].rank) { // もし`this.props.allReviews[i]`の`rank`が
+        case GREAT: // `GREAT`だったら、
+          nGreat++; // `nGreat`を1追加
+          break; // 比較を終了して抜け出す
+
+        case GOOD: // `GOOD`だったら、
+          nGood++; // `nGood`を1追加
+          break; // 比較を終了して抜け出す
+
+        case POOR: // `POOR`だったら、
+          nPoor++; // `nPoor`を1追加
+          break; // 比較を終了して抜け出す
+
+        default: // それ以外だったら、
+          break; // (特に何もせず)抜け出す
+      }
+    }
+
     const buttonList = [
-      'All',
-      'Great (0)',
-      'Good (0)',
-      'Poor (0)',
+      `All (${this.props.allReviews.length})`, // ←バッククォート&テンプレート文字列に変更
+      `Great (${nGreat})`, // ←バッククォート&テンプレート文字列に変更
+      `Good (${nGood})`, // ←バッククォート&テンプレート文字列に変更
+      `Poor (${nPoor})` // ←バッククォート&テンプレート文字列に変更
     ];
   
     return (
@@ -168,4 +163,11 @@ class HomeScreen extends React.Component {
   }
 }
 
-export default HomeScreen;
+const mapStateToProps = (state) => { // `state`を引数として受け取るアロー関数
+  return {
+    // `state.review.allReviews`を → `this.props.allReviews`にコピー
+    allReviews: state.review.allReviews
+  };
+};
+
+export default connect(mapStateToProps, actions)(HomeScreen);
