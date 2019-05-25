@@ -1,8 +1,13 @@
-const FETCH_ALL_REVIEWS = 'fetch_all_reviews'; // `review_action.js`と同じ
+import {
+  FETCH_ALL_REVIEWS,
+  SELECT_DETAIL_REVIEW,
+} from '../actions/types'; // ← './types'じゃないので注意
 
-const INITIAL_STATE = { // 初期データ
-  allReviews: [], // `allReviews`は最初、空の配列とする
+const INITIAL_STATE = {
+  allReviews: [],
+  detailReview: [], // ←追記部分
 };
+
 
 
 export default (state = INITIAL_STATE, action) => { // `state`と`action`を受け取り、

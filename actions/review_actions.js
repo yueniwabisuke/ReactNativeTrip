@@ -1,10 +1,15 @@
-const FETCH_ALL_REVIEWS = 'fetch_all_reviews';
-
+import {
+  FETCH_ALL_REVIEWS,
+  SELECT_DETAIL_REVIEW,
+} from './types';
 
 export const fetchAllReviews = () => {
   return { type: FETCH_ALL_REVIEWS, payload: allReviewsTmp };
 };
 
+export const selectDetailReview = (selectedReview) => { // ←追記ここから
+  return { type: SELECT_DETAIL_REVIEW, payload: selectedReview };
+}; // ←追記ここまで
 
 const GREAT = 'sentiment-very-satisfied'; // ←忘れずに
 const GOOD = 'sentiment-satisfied'; // ←忘れずに

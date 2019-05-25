@@ -33,7 +33,9 @@ class HomeScreen extends React.Component {
 
   // `onPress`からの引数は`selectedReview`という名で受け止める(一旦放置。後で使用)
   onListItemPress = (selectedReview) => {
-    // 'detail'に飛ぶ
+    // Action creatorを発動する
+    this.props.selectDetailReview(selectedReview); // ←追記部分
+    
     this.props.navigation.navigate('detail');
   }
 
