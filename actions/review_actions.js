@@ -7,13 +7,14 @@ export const fetchAllReviews = () => {
   return { type: FETCH_ALL_REVIEWS, payload: allReviewsTmp };
 };
 
+const GREAT = 'sentiment-very-satisfied'; // ←忘れずに
+const GOOD = 'sentiment-satisfied'; // ←忘れずに
+const POOR = 'sentiment-dissatisfied'; // ←忘れずに
+
 export const selectDetailReview = (selectedReview) => { // ←追記ここから
   return { type: SELECT_DETAIL_REVIEW, payload: selectedReview };
 }; // ←追記ここまで
 
-const GREAT = 'sentiment-very-satisfied'; // ←忘れずに
-const GOOD = 'sentiment-satisfied'; // ←忘れずに
-const POOR = 'sentiment-dissatisfied'; // ←忘れずに
 
 const allReviewsTmp = [ // ←`screens/HomeScreen.js`からコピペ
   {
